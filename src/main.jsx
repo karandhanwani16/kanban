@@ -8,8 +8,8 @@ import './index.css'
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-
+  // <StrictMode>
+  <>
     <App />
     <ToastContainer
       stacked
@@ -24,5 +24,6 @@ createRoot(document.getElementById('root')).render(
       transition:Bounce
     />
 
-  </StrictMode>,
+  </>
+  // </StrictMode>,
 )

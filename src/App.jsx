@@ -10,8 +10,15 @@ import EmployeeView from "./components/EmployeeView"
 export const employeeContext = createContext();
 export const taskContext = createContext();
 export const kanbanBoardColumnContext = createContext();
-
-const initialTasks = [];
+export const authContext = createContext();
+const initialTasks = [
+  {
+    id: 1,
+    title: "Task 1",
+    description: "Task 1 Description",
+    assignee: 1
+  }
+];
 // const initialTasks = [
 //   {
 //     id: 1,
@@ -35,7 +42,7 @@ const initialKanbanBoardColumns = [
   {
     id: 1,
     title: "To Do",
-    tasks: []
+    tasks: [1]
   },
   {
     id: 2,
@@ -55,37 +62,45 @@ const initialKanbanBoardColumns = [
 ]
 function App() {
 
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState([
+    {
+      id: 1,
+      name: "John Doe"
+    }
+  ]);
   const [tasks, setTasks] = useState(initialTasks);
   const [kanbanBoardColumns, setKanbanBoardColumns] = useState(initialKanbanBoardColumns);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
 
 
 
   return (
-    <kanbanBoardColumnContext.Provider value={{ kanbanBoardColumns, setKanbanBoardColumns }}>
-      <taskContext.Provider value={{ tasks, setTasks }}>
-        <employeeContext.Provider value={{ employees, setEmployees }}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/login" element={
-                isLoggedIn ? <Navigate to="/" /> : <Login />
-              } />
-              <Route path="/" element={
-                isLoggedIn ? <AdminLayout /> : <Navigate to="/login" />
-              }>
-                <Route path="/" element={<Employee />} >
-                  <Route path="/" element={<EmployeeUpload />} />
-                  <Route path="/view" element={<EmployeeView />} />
+    <authContext.Provider value={{ isLoggedIn, setIsLoggedIn }}>
+
+      <kanbanBoardColumnContext.Provider value={{ kanbanBoardColumns, setKanbanBoardColumns }}>
+        <taskContext.Provider value={{ tasks, setTasks }}>
+          <employeeContext.Provider value={{ employees, setEmployees }}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/login" element={
+                  isLoggedIn ? <Navigate to="/" /> : <Login />
+                } />
+                <Route path="/" element={
+                  isLoggedIn ? <AdminLayout /> : <Navigate to="/login" />
+                }>
+                  <Route path="/" element={<Employee />} >
+                    <Route path="/" element={<EmployeeUpload />} />
+                    <Route path="/view" element={<EmployeeView />} />
+                  </Route>
+                  <Route path="board" element={<KanbanBoard />} />
                 </Route>
-                <Route path="board" element={<KanbanBoard />} />
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </employeeContext.Provider>
-      </taskContext.Provider>
-    </kanbanBoardColumnContext.Provider>
+              </Routes>
+            </BrowserRouter>
+          </employeeContext.Provider>
+        </taskContext.Provider>
+      </kanbanBoardColumnContext.Provider>
+    </authContext.Provider>
 
   )
 }

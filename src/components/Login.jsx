@@ -1,8 +1,9 @@
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"
 // import { DevTool } from "@hookform/devtools";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { authContext } from "../App";
 
 const usernameOptions = {
     required: "username is required",
@@ -31,6 +32,8 @@ const passwordOptions = {
 function Login() {
 
     const [showPassword, setShowPassword] = useState(false);
+
+    const { setIsLoggedIn } = useContext(authContext);
 
     // uncomment this to use devtool
     // const { register, handleSubmit, formState: { errors }, control } = useForm();
